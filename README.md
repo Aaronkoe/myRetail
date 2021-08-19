@@ -7,7 +7,7 @@ see supplied pdf for problem statement
 
 # Solution description
 
-This solution implements the desired REST api using Spring Boot with MongoDB. There is a POJO to represent both a Product and a CurrentPrice located in the `model` directory. MongoDB is used to store a Product (which contains a CurrentPrice), and the id of a price is primarily used to lookup the value and currency code of a product. The database doesn't store the name of any products, though the name field is mapped to an empty string for each record. The api retrieves names as needed from the RedSky api provided.
+This solution implements the desired REST api using Spring Boot with MongoDB. There is a POJO to represent each a Product and a CurrentPrice located in the `model` package. MongoDB is used to store a Product (which contains a CurrentPrice), and the id of a price is primarily used to lookup the value and currency code of a product. The database doesn't store the name of any products, though the name field is mapped to an empty string for each record. The api retrieves names as needed from the RedSky api provided.
 
 The application exposes 5 end points:
 
