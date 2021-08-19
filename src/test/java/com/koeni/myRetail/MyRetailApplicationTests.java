@@ -1,5 +1,6 @@
 package com.koeni.myRetail;
 
+import com.koeni.myRetail.model.CurrentPrice;
 import com.koeni.myRetail.model.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +8,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MyRetailApplicationTests {
+
+	@Autowired
+	MyRetailController controller;
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -18,6 +23,9 @@ class MyRetailApplicationTests {
 	private String bigLebowskiName = "The Big Lebowski (Blu-ray)";
 	private double zeroTolerance = .0001;
 
+	/*
+	Assert that a GET responds with a product with the correct name and id.
+	 */
 	@Test
 	void getProductValidIdNameMatches() {
 		Product result = this.restTemplate.getForObject("/myRetail/products/" + bigLebowskiId, Product.class);
@@ -25,6 +33,9 @@ class MyRetailApplicationTests {
 		assertThat(result.getCurrent_price()).isNotEqualTo(null);
 	}
 
+	/*
+	Assert that a put to update the price and currency code of an object does so.
+	 */
 	@Test
 	void putProductValidIdPriceAndCurrencyCode() {
 		Product result = this.restTemplate.getForObject("/myRetail/products/" + bigLebowskiId, Product.class);
@@ -41,6 +52,20 @@ class MyRetailApplicationTests {
 		assertThat(secondResult.getCurrent_price().getCurrency_code()).isEqualTo(newCurrencyCode);
 		assertThat(result.getName()).isEqualTo(secondResult.getName());
 		assertThat(result.getId()).isEqualTo(secondResult.getId());
+	}
+
+	/*
+	Assert that attempting to update the price of a mismatched id fails.
+	 */
+	@Test
+	void putProductIdMismatch() {
+		Product wrongId = new Product(1, "", new CurrentPrice(0.0, "USD"));
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			controller.replaceProductPrice(bigLebowskiId, wrongId);
+		});
+		String expectedMessage = "Id does not match";
+		String actualMessage = exception.getMessage();
+		assertThat(expectedMessage).isEqualTo(actualMessage);
 	}
 
 }
