@@ -61,4 +61,4 @@ There are a few tests defined for the api above which can be viewed in the `test
 
 The api should be accessible at `koenigsberg.me:8080/myRetail/`, where I have an instance of the api running. However, my ip address is dynamic from my ISP, so it may change, at which point the `koenigsberg.me` domain name points to the wrong ip address. Use `koenigsberg.me:8080/myRetail/ping` to make sure the server is reachable. It should respond with the string `Pong` if it is.
 
-Otherwise, the project can be compiled to a jar with `mvnw target` on your local machine, in which case requests should go to `localhost:8080/...`.
+Otherwise, the project can be compiled to a jar with `mvnw clean package` on your local machine, in which case requests should go to `localhost:8080/...`.
